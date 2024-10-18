@@ -1,0 +1,62 @@
+import csv
+
+filename = 'data.csv'
+
+def load_books(filename):
+    books = []
+    try:
+        with open(filename, 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                books.append(row[0])
+    except FileNotFoundError:
+        print(f"Файл {filename} не найден. Создаем новый файл.")
+    return books
+
+def save_books(filename, books):
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        for book in books:
+            writer.writerow([book])
+
+def add_book(books):
+    title = input('Введите название книги: ')
+    books.append(title)
+
+def delete_book(books):
+    index = int(input('Введите номер книги для удаления: ')) - 1
+    if 0 <= index < len(books):
+        del books[index]
+    else:
+        print("Некорректный номер книги.")
+
+def show_library(books):
+    if not books:
+        print('Список книг пуст.')
+    else:
+        for i, book in enumerate(books, start=1):
+            print(f'{i}. {book}')
+
+def main():
+    books = load_books(filename)
+    while True:
+        print('\n1. Показать книги')
+        print('2. Добавить книгу')
+        print('3. Удалить книгу')
+        print('4. Сохранить и выйти')
+        choice = input('Выберите действие: ')
+        if choice == '1':
+            show_library(books)
+        elif choice == '2':
+            add_book(books)
+        elif choice == '3':
+            delete_book(books)
+        elif choice == '4':
+            save_books(filename, books)
+            print(f'Библиотека сохранена в файле {filename}.')
+            break
+        else:
+            print('Выберите корректный пункт меню.')
+
+if __name__ == '__main__':
+    main()
